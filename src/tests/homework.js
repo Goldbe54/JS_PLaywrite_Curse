@@ -11,17 +11,16 @@ function getComments() {
     })
 }
 
-function getPosts() {
-    return new Promise(async (resolve,reject) => {
+let getPosts = async () => {
         try {
             let response = await axios.get("https://jsonplaceholder.typicode.com/posts/2");
-            resolve(response.data);
+            return response.data;
         }catch(e){
-            reject(e.message);
+            return e.message;
         }
-    })
 }
 
+console.log(getPosts());
 getComments().then((comments) => {
     console.log(comments);
 })
