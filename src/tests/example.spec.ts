@@ -1,4 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { CodewarsLandingPage } from './codewars-pom';
+import { MdnLandingPage, MdnBlogPage , MdnDocsPage } from './dev-mosilla-pov';
+import { WikipediaLandingPage , WikiResultPage } from './wikipedia-pom';
+import { UaSerialLandingPage, UaSerialSearchResultsPage } from './uaserial-pom';
 
 test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');
@@ -18,97 +22,106 @@ test('get started link', async ({ page }) => {
 });
  
 test('codewars base check', async ({ page }) => {
-  await page.goto('https://www.codewars.com/dashboard/');
+  let codewarsLanding = new CodewarsLandingPage(page);
+  await codewarsLanding.goto();
 
   await expect(page).toHaveTitle(/Codewars/);
-  await expect(page.getByLabel('home').nth(1)).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Get Started' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Log in' }).nth(1)).toBeVisible;
-  await expect(page.getByRole('heading', { name: 'What can I use Codewars for?' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Join' }).nth(1)).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Blog' }).nth(1)).toBeVisible;
-  await expect(page.getByRole('link', { name: 'For Educators' }).nth(1)).toBeVisible;
-  await expect(page.getByRole('link', { name: 'For Companies' }).nth(1)).toBeVisible;
-  await expect(page.getByRole('heading', { name: 'Achieve mastery through' })).toBeVisible;
+  await expect(codewarsLanding.getLogoElement).toBeVisible;
+  await expect(codewarsLanding.getStartedButton).toBeVisible;
+  await expect(codewarsLanding.getLoginButton).toBeVisible;
+  await expect(codewarsLanding.getAboutCodewarsTitleElement).toBeVisible;
+  await expect(codewarsLanding.getJoinButton).toBeVisible;
+  await expect(codewarsLanding.getBlogButton).toBeVisible;
+  await expect(codewarsLanding.getForEducatorsButton).toBeVisible;
+  await expect(codewarsLanding.getForCompaniesButton).toBeVisible;
+  await expect(codewarsLanding.getMaintTitleElement).toBeVisible;
 });
 
 test('developer mozila base check', async ({ page }) => {
-  await page.goto('https://developer.mozilla.org/en-US/');
+  let mdnLanding = new MdnLandingPage(page);
+  let mdnBlog = new MdnBlogPage(page);
+  await mdnLanding.goto();
 
   await expect(page).toHaveTitle(/MDN Web Docs/);
-  await expect(page.getByRole('banner').getByLabel('MDN homepage')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Sign up for free' })).toBeVisible;
+  await expect(mdnLanding.getLogoElement).toBeVisible;
+  await expect(mdnLanding.getLoginButton).toBeVisible;
+  await expect(mdnLanding.getSignUpButton).toBeVisible;
 
-  await page.getByLabel('Main menu', { exact: true }).getByRole('link', { name: 'Blog' }).click();
+  await mdnLanding.getBlogButton.click();
 
   await expect(page).toHaveTitle(/MDN Blog/);
-  await expect(page.getByRole('banner').getByLabel('MDN homepage')).toBeVisible;
-  await expect(page.getByRole('heading', { name: 'Blog it better' })).toBeVisible;
-  await expect(page.getByText('Get real-time assistance with')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Sign up for free' })).toBeVisible;
+  await expect(mdnBlog.getLogoElement).toBeVisible;
+  await expect(mdnBlog.getMainTitleElement).toBeVisible;
+  await expect(mdnBlog.getHelpProposeElement).toBeVisible;
+  await expect(mdnBlog.getLoginButton).toBeVisible;
+  await expect(mdnBlog.getSignUpButton).toBeVisible;
 });
 
 test('developer mozila search check', async ({ page }) => {
-  await page.goto('https://developer.mozilla.org/en-US/');
+  let mdnLanding = new MdnLandingPage(page);
+  let mdnDocs = new MdnDocsPage(page);
+  await mdnLanding.goto();
 
   await expect(page).toHaveTitle(/MDN Web Docs/);
-  await expect(page.getByRole('banner').getByLabel('MDN homepage')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Log in' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Sign up for free' })).toBeVisible;
+  await expect(mdnLanding.getLogoElement).toBeVisible;
+  await expect(mdnLanding.getLoginButton).toBeVisible;
+  await expect(mdnLanding.getSignUpButton).toBeVisible;
 
-  await page.locator('#top-nav-search-input').click();
-  await page.locator('#top-nav-search-input').fill("String");
+  await mdnLanding.getSearchInputField.click();
+  await mdnLanding.getSearchInputField.fill("String");
   await page.waitForTimeout(100);
-  await page.locator('#top-nav-search-input').press('Enter');
+  await mdnLanding.getSearchInputField.press('Enter');
 
   await expect(page).toHaveTitle(/String - JavaScript | MDN/);
-  await expect(page.getByRole('heading', { name: 'String', exact: true })).toBeVisible;
-  await expect(page.getByText('ReferencesJavaScriptReferenceStandard built-in objectsStringArticle')).toBeVisible;
-  await expect(page.getByLabel('Related Topics').getByRole('link', { name: 'String', exact: true })).toBeVisible;
-  await expect(page.getByRole('link', { name: '# Description' })).toBeVisible;
-  await expect(page.getByRole('link', { name: '# Creating strings' })).toBeVisible;
+  await expect(mdnDocs.getMainDockTitleElement).toBeVisible;
+  await expect(mdnDocs.getDockPathElement).toBeVisible;
+  await expect(mdnDocs.getDockLeftbarElement).toBeVisible;
+  await expect(mdnDocs.getDescriptionElement).toBeVisible;
+  await expect(mdnDocs.getDockSubtitleElement).toBeVisible;
 });
 
 test('wikipedia base check', async ({ page }) => {
-  await page.goto('https://uk.wikipedia.org/wiki/Головна_сторінка');
+  let wikipediaLanding = new WikipediaLandingPage(page);
+  let wikiResult = new WikiResultPage(page);
+  await wikipediaLanding.goto();
 
   await expect(page).toHaveTitle(/Вікіпедія/);
-  await expect(page.getByRole('link', { name: 'Перейти на головну сторінку' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Головна', exact: true })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Увійти' })).toBeVisible;
+  await expect(wikipediaLanding.getLogoElement).toBeVisible;
+  await expect(wikipediaLanding.getMainTabElement).toBeVisible;
+  await expect(wikipediaLanding.getLoginButton).toBeVisible;
 
-  await page.getByPlaceholder('Пошук у Вікіпедії').click();
-  await page.getByPlaceholder('Пошук у Вікіпедії').fill("Україна");
+  await wikipediaLanding.getInputSearchFieldButton.click();
+  await wikipediaLanding.getInputSearchFieldButton.fill("Україна");
   await page.waitForTimeout(100);
-  await page.getByPlaceholder('Пошук у Вікіпедії').press('Enter');
+  await wikipediaLanding.getInputSearchFieldButton.press('Enter');
 
   await expect(page).toHaveTitle(/Україна — Вікіпедія/);
-  await expect(page.locator('#firstHeading').getByText('Україна')).toBeVisible;
-  await expect(page.getByRole('cell', { name: 'Україна', exact: true }).locator('b')).toBeVisible;
-  await expect(page.getByText('Матеріал з Вікіпедії — вільної енциклопедії')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Українській Вікіпедії — 20' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Читати' })).toBeVisible;
+  await expect(wikiResult.getArticleNameElement).toBeVisible;
+  await expect(wikiResult.getInfoCellElement).toBeVisible;
+  await expect(wikiResult.getSiteSubElement).toBeVisible;
+  await expect(wikiResult.getAnnouncementElement).toBeVisible;
+  await expect(wikiResult.getReadTabButton).toBeVisible;
 });
 
 test('uaserial base check', async ({ page }) => {
-  await page.goto('https://uaserial.club/');
+  let uaSerialLanding = new UaSerialLandingPage(page);
+  let uaSerialSearchResultsPage = new UaSerialSearchResultsPage(page);
+  await uaSerialLanding.goto();
 
   await expect(page).toHaveTitle(/Дивись фільми та серіали лише українською онлайн – UAserial.club/);
-  await expect(page.getByRole('banner').getByLabel('uaserial')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Вхід' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Ми в Telegram' })).toBeVisible;
+  await expect(uaSerialLanding.getLogoElement).toBeVisible;
+  await expect(uaSerialLanding.getLoginButton).toBeVisible;
+  await expect(uaSerialLanding.getTelegramLinkButton).toBeVisible;
 
-  await page.getByText('Пошук серіалів, сезонів тощо').click();
-  await page.getByText('Пошук серіалів, сезонів тощо').fill("Втеча");
+  await uaSerialLanding.getInputSearchField.click();
+  await uaSerialLanding.getInputSearchField.fill("Втеча");
   await page.waitForTimeout(100);
-  await page.getByText('Пошук серіалів, сезонів тощо').press('Enter');
+  await uaSerialLanding.getInputSearchField.press('Enter');
 
   await expect(page).toHaveTitle(/Пошук за запитом Втеча/);
-  await expect(page.getByRole('heading', { name: 'Результат пошуку "Втеча"' })).toBeVisible;
-  await expect(page.getByRole('banner').getByLabel('uaserial')).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Вхід' })).toBeVisible;
-  await expect(page.getByRole('link', { name: 'Ми в Telegram' })).toBeVisible;
-  await expect(page.getByText('Фільми та серіали:')).toBeVisible;
+  await expect(uaSerialSearchResultsPage.getSearchResultTitleElement).toBeVisible;
+  await expect(uaSerialSearchResultsPage.getLogoElement).toBeVisible;
+  await expect(uaSerialSearchResultsPage.getLoginButton).toBeVisible;
+  await expect(uaSerialSearchResultsPage.getTelegramLinkButton).toBeVisible;
+  await expect(uaSerialSearchResultsPage.getProductTypeElement).toBeVisible;
 });
