@@ -1,24 +1,60 @@
 import { test, expect } from '@playwright/test';
-import { CodewarsLandingPage } from './codewars-pom';
-import { MdnLandingPage, MdnBlogPage , MdnDocsPage } from './dev-mosilla-pov';
-import { WikipediaLandingPage , WikiResultPage } from './wikipedia-pom';
-import { UaSerialLandingPage, UaSerialSearchResultsPage } from './uaserial-pom';
+import { CodewarsLandingPage } from './pom-folder/codewars-pom';
+import { MdnLandingPage, MdnBlogPage , MdnDocsPage } from './pom-folder/dev-mosilla-pom';
+import { WikipediaLandingPage , WikiResultPage } from './pom-folder/wikipedia-pom';
+import { UaSerialLandingPage, UaSerialSearchResultsPage } from './pom-folder/uaserial-pom';
+import { TrelloLandingPage , TrelloLoginPage, TrelloHomegPage} from './pom-folder/trello-pom';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+// test('has title', async ({ page }) => {
+//   await page.goto('https://playwright.dev/');
+
+//   // Expect a title "to contain" a substring.
+//   await expect(page).toHaveTitle(/Playwright/);
+// });
+
+// test('get started link', async ({ page }) => {
+//   await page.goto('https://playwright.dev/');
+
+//   // Click the get started link.
+//   await page.getByRole('link', { name: 'Get started' }).click();
+
+//   // Expects page to have a heading with the name of Installation.
+//   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+// });
+
+test('trello base check', async ({ page }) => {
+  let trelloLanding = new TrelloLandingPage(page);
+  await trelloLanding.goto();
+
+  await expect(page).toHaveTitle(/Керуйте проєктами своєї команди звідусіль | Trello/);
+  await expect(trelloLanding.getAtlantisTrelloLogo).toBeVisible;
+  await expect(trelloLanding.getFeaturesDropdown).toBeVisible;
+  await expect(trelloLanding.getSolutionsDropdown).toBeVisible;
+  await expect(trelloLanding.getPlansDropdown).toBeVisible;
+  await expect(trelloLanding.getResourcesDropdown).toBeVisible;
+  await expect(trelloLanding.getLoginButton).toBeVisible;
+  await expect(trelloLanding.getSignUpButton).toBeVisible;
+  await expect(trelloLanding.getAnnouncementElement).toBeVisible;
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('trello home base check', async ({ page }) => {
+  let trelloLanding = new TrelloLandingPage(page);
+  let trelloLogin = new TrelloLoginPage(page);
+  let trelloHome = new TrelloHomegPage(page);
+  await trelloLanding.goto();
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+  await expect(page).toHaveTitle(/Керуйте проєктами своєї команди звідусіль | Trello/);
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+  await trelloLanding.getLoginButton.click();
+  await trelloLogin.loginViaEmail("royko02@ukr.net","U5BR?SASv3eBs$M");
+  
+  await expect(trelloHome.getTrelloLogo).toBeVisible;
+  await expect(trelloHome.getWorkspacesDropdown).toBeVisible;
+  await expect(trelloHome.getRecentDropdown).toBeVisible;
+  await expect(trelloHome.getStarredDropdown).toBeVisible;
+  await expect(trelloHome.getMoreDropdown).toBeVisible;
+  await expect(trelloHome.getCreateMenuButton).toBeVisible;
 });
  
 test('codewars base check', async ({ page }) => {
