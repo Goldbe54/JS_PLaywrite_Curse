@@ -57,7 +57,7 @@ export class TrelloLoginPage {
     }
   }
 
-  export class TrelloHomegPage {
+  export class TrelloHomePage {
     readonly page: Page;
     readonly getTrelloLogo: Locator;
     readonly getWorkspacesDropdown: Locator;
