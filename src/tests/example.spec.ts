@@ -1,25 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { CodewarsLandingPage } from './codewars-pom';
-import { MdnLandingPage, MdnBlogPage , MdnDocsPage } from './dev-mosilla-pov';
-import { WikipediaLandingPage , WikiResultPage } from './wikipedia-pom';
-import { UaSerialLandingPage, UaSerialSearchResultsPage } from './uaserial-pom';
-
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+import { test } from '../fixtures/fixture';
+import { expect } from '@playwright/test';import { CodewarsLandingPage } from './pom-folder/codewars-pom';
+import { MdnLandingPage, MdnBlogPage , MdnDocsPage } from './pom-folder/dev-mosilla-pom';
+import { WikipediaLandingPage , WikiResultPage } from './pom-folder/wikipedia-pom';
+import { UaSerialLandingPage, UaSerialSearchResultsPage } from './pom-folder/uaserial-pom';
  
 test('codewars base check', async ({ page }) => {
   let codewarsLanding = new CodewarsLandingPage(page);

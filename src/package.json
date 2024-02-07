@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "leson3.1.js",
-  "scripts": {},
+  "scripts": {"tests:run": "playwright test --config=trello.config.ts --headed"},
   "type": "module",
   "keywords": [],
   "author": "",
