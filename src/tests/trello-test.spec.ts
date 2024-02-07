@@ -18,7 +18,7 @@ test('trello landing page base check', async ({ page }) => {
 });
 
 test('trello home page base check', async ({trelloHome, page }) => {
-  await expect(page).toHaveTitle(/Boards | Trello/);
+  await expect(page).toHaveTitle(/Trello/);
   await expect(trelloHome.getTrelloLogo).toBeVisible;
   await expect(trelloHome.getWorkspacesDropdown).toBeVisible;
   await expect(trelloHome.getRecentDropdown).toBeVisible;
