@@ -54,7 +54,7 @@ test('developer mozila search check', async ({ page }) => {
   await mdnLanding.getSearchInputField.fill("String");
   await page.waitForTimeout(100);
   await mdnLanding.getSearchInputField.press('Enter');
-
+  await page.waitForLoadState();
   await expect(page).toHaveTitle(/String - JavaScript | MDN/);
   await expect(mdnDocs.getMainDockTitleElement).toBeVisible;
   await expect(mdnDocs.getDockPathElement).toBeVisible;
